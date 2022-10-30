@@ -37,7 +37,7 @@ class SnakeSearcher {
 
 	hitWall() {
 		const head = this.body[this.body.length - 1];
-		if (head.tileX > -1 && head.tileY > -1 && head.tileX < 24 && head.tileY < 24) {
+		if (head.tileX > -1 && head.tileY > -1 && head.tileX < (BOARD_SIZE / TILE_SIZE) && head.tileY < (BOARD_SIZE / TILE_SIZE)) {
 			if (game.board.board[head.tileY][head.tileX] == WALL) {
 				return true;
 			}
@@ -109,6 +109,22 @@ class GoldenAppleSearcher {
 		return new GoldenAppleSearcher(this.tileX, this.tileY, this.direction);
 	}
 
+	hitWall() {
+		if (this.tileX > -1 && this.tileY > -1 && this.tileX < (BOARD_SIZE / TILE_SIZE) && this.tileY < (BOARD_SIZE / TILE_SIZE)) {
+			if (game.board.board[this.tileY][this.tileX] == WALL) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	hitSides() {
+		const inXBounds = 0 <= this.tileX && this.tileX <= (BOARD_SIZE / TILE_SIZE) - 1;
+		const inYBounds = 0 <= this.tileY && this.tileY <= (BOARD_SIZE / TILE_SIZE) - 1;
+		return inXBounds && inYBounds;
+	}
+
 	makeMove(newDirection) {
 		switch(newDirection) {
 			case RIGHT:
@@ -172,19 +188,17 @@ function search(alphaBeta, depth, ply, is_snake, snakeSearcher, goldenAppleSearc
 
 	//SNAKE HAS EATEN GOLDEN APPLE
 	if (snakeSearcher.isOn(goldenAppleSearcher.tileX, goldenAppleSearcher.tileY)) {
+		//if the snake and golden apple meet, it is only good for the snake!
 		if (is_snake) {
 			return [NONE, WIN_BASE - ply];
 		} else {
-			return [NONE, -WIN_BASE + ply];			
+			return [NONE, -WIN_BASE + ply];	
 		}
 	}
 
-	if (snakeSearcher.hitSelf() || snakeSearcher.hitWall() || !snakeSearcher.hitSides()) {
-		if (is_snake) {
-			return [NONE, -WIN_BASE + ply];
-		} else {
-			return [NONE, WIN_BASE - ply];
-		}
+	if (snakeSearcher.hitSelf() || snakeSearcher.hitWall() || !snakeSearcher.hitSides() || goldenAppleSearcher.hitWall() || !goldenAppleSearcher.hitSides()) {
+		//no matter who dies, it is always bad for them
+		return [NONE, WIN_BASE - ply];
 	}
 
 	var legalMoves;
