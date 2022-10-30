@@ -75,12 +75,12 @@ class Snake {
 		
 		this.increase = false;
 		this.direction = directions[Math.floor(Math.random() * directions.length)];
-		this.coolDown = 4;
+		this.coolDown = 6;
 		this.coolDownCounter = 0;
 
 		//0 == tail, length - 1 == head
 		this.board = board;
-		this.body = generateBody(3, board, this.direction);
+		this.body = generateBody(1, board, this.direction);
 	}
 
 	cloneBody() {
