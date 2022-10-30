@@ -1,0 +1,23 @@
+body {
+	background-color:  #A7D948;
+}
+
+#game-container {
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+#canvas {
+	border-radius: 8px;
+	border: 2px solid #578A34;
+	box-shadow: 0px 0px 100px #578A34;
+}
+
+.outer-wrapper {
+	display: flex;
+	justify-content: center;
+}

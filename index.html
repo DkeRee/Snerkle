@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Snerkle</title>
+		<link href = "style.css" rel = "stylesheet" type = "text/css">
+	</head>
+	<body>
+		<div id = "game-container">
+			<div class = "outer-wrapper">
+				<canvas id = "canvas"></canvas>
+			</div>
+		</div>
+		<script>
+			//GET CANVAS CTX
+			const canvas = document.getElementById("canvas");
+			const ctx = canvas.getContext("2d");
+		</script>
+		<script src = "js/global.js"></script>
+		<script src = "js/perlin.js"></script>
+		<script src = "js/board.js"></script>
+		<script src = "js/snakeBot.js"></script>
+		<script src = "js/snake.js"></script>
+		<script src = "js/goldenApple.js"></script>
+		<script src = "js/game.js"></script>
+		<script src = "js/runner.js"></script>
+	</body>
+</html>
