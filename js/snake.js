@@ -73,6 +73,7 @@ class Snake {
 	constructor(board) {
 		const directions = [RIGHT, LEFT, UP, DOWN];
 		
+		this.increase = false;
 		this.direction = directions[Math.floor(Math.random() * directions.length)];
 		this.coolDown = 4;
 		this.coolDownCounter = 0;
@@ -90,6 +91,32 @@ class Snake {
 		}
 
 		return newBody;
+	}
+
+	increaseLength() {
+		var xInc = 0;
+		var yInc = 0;
+
+		switch(this.direction) {
+			case RIGHT:
+				xInc = 1;
+				break;
+			case LEFT:
+				xInc = -1;
+				break;
+			case UP:
+				yInc = -1;
+				break;
+			case DOWN:
+				yInc = 1;
+				break;
+		}
+
+		const testBody = new LocalBody(this.body[this.body.length - 1].tileX + xInc, this.body[this.body.length - 1].tileY + yInc);
+		if (this.board.checkAllowed(testBody.tileX, testBody.tileY)) {
+			this.body.push(new Body(testBody.tileX, testBody.tileY, this.board));
+			this.increase = false;
+		}
 	}
 
 	updateMovement() {
@@ -132,8 +159,13 @@ class Snake {
 	update() {
 		if (this.coolDownCounter >= this.coolDown) {
 			this.coolDownCounter = 0;
-			this.updateMovement();
+
 			this.invokeBot();
+			this.updateMovement();
+
+			if (this.increase) {
+				this.increaseLength();
+			}
 		} else {
 			this.coolDownCounter += 1;
 		}

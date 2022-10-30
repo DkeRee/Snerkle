@@ -81,6 +81,7 @@ class Board {
 		if (inBounds) {
 			if (this.board[y][x] == COIN) {
 				game.coinCounter++;
+				game.snake.increase = true;
 				this.createCoin();
 			}
 

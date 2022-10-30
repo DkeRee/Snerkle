@@ -1,3 +1,5 @@
+const WIN_BASE = 30000;
+
 class LocalBody {
 	constructor(x, y) {
 		this.tileX = x;
@@ -23,6 +25,14 @@ class SnakeSearcher {
 
 	clone() {
 		return new SnakeSearcher(this.cloneBody(), this.direction);
+	}
+
+	hitSides() {
+		const head = this.body[this.body.length - 1];
+
+		const inXBounds = 0 <= head.tileX && head.tileX <= (BOARD_SIZE / TILE_SIZE) - 1;
+		const inYBounds = 0 <= head.tileY && head.tileY <= (BOARD_SIZE / TILE_SIZE) - 1;
+		return inXBounds && inYBounds;
 	}
 
 	hitWall() {
@@ -64,7 +74,7 @@ class SnakeSearcher {
 			y: latestHead.tileY
 		};
 
-		switch(this.direction) {
+		switch(newDirection) {
 			case RIGHT:
 				newHeadCoords.x += 1;
 				break;
@@ -142,14 +152,12 @@ class AlphaBeta {
 	}
 }
 
-const WIN_BASE = 30000;
-
 function evaluate(snakeSearcher, goldenAppleSearcher, is_snake) {
 	const snakeHead = snakeSearcher.body[snakeSearcher.body.length - 1];
-	const dist = Math.abs(snakeHead.tileX - goldenAppleSearcher.tileX) + Math.abs(snakeHead.tileY - goldenAppleSearcher.tileY) / 100;
+	const dist = Math.abs(snakeHead.tileX - goldenAppleSearcher.tileX) + Math.abs(snakeHead.tileY - goldenAppleSearcher.tileY);
 	
 	if (is_snake) {
-		return 1 - dist;
+		return -dist;
 	} else {
 		return dist;
 	}
@@ -166,12 +174,16 @@ function search(alphaBeta, depth, ply, is_snake, snakeSearcher, goldenAppleSearc
 	if (snakeSearcher.isOn(goldenAppleSearcher.tileX, goldenAppleSearcher.tileY)) {
 		if (is_snake) {
 			return [NONE, WIN_BASE - ply];
+		} else {
+			return [NONE, -WIN_BASE + ply];			
 		}
 	}
 
-	if (snakeSearcher.hitSelf() || snakeSearcher.hitWall()) {
+	if (snakeSearcher.hitSelf() || snakeSearcher.hitWall() || !snakeSearcher.hitSides()) {
 		if (is_snake) {
 			return [NONE, -WIN_BASE + ply];
+		} else {
+			return [NONE, WIN_BASE - ply];
 		}
 	}
 
