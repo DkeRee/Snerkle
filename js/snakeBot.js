@@ -25,6 +25,14 @@ class SnakeSearcher {
 		return new SnakeSearcher(this.cloneBody(), this.direction);
 	}
 
+	hitSides() {
+		const head = this.body[this.body.length - 1];
+
+		const inXBounds = 0 <= head.tileX && head.tileX <= (BOARD_SIZE / TILE_SIZE) - 1;
+		const inYBounds = 0 <= head.tileY && head.tileY <= (BOARD_SIZE / TILE_SIZE) - 1;
+		return inXBounds && inYBounds;
+	}
+
 	hitWall() {
 		const head = this.body[this.body.length - 1];
 		if (head.tileX > -1 && head.tileY > -1 && head.tileX < 24 && head.tileY < 24) {
@@ -169,7 +177,7 @@ function search(alphaBeta, depth, ply, is_snake, snakeSearcher, goldenAppleSearc
 		}
 	}
 
-	if (snakeSearcher.hitSelf() || snakeSearcher.hitWall()) {
+	if (snakeSearcher.hitSelf() || snakeSearcher.hitWall() || !snakeSearcher.hitSides()) {
 		if (is_snake) {
 			return [NONE, -WIN_BASE + ply];
 		}
