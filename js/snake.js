@@ -127,6 +127,7 @@ class Snake {
 	invokeBot() {
 		const result = search(new AlphaBeta(-Infinity, Infinity), 16, 0, true, new SnakeSearcher(this.cloneBody(), this.direction), new GoldenAppleSearcher(game.goldenApple.tileX, game.goldenApple.tileY, game.goldenApple.direction));
 		this.direction = result[0];
+		console.log(result[1]);
 	}
 
 	update() {
