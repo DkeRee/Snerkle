@@ -13,7 +13,7 @@ function initBoard(numTiles) {
 			noise += 1;
 			noise /= 2;
 
-			if (noise > 0.3) {
+			if (noise > 0.26) {
 				row.push(EMPTY);
 			} else {
 				row.push(WALL);
